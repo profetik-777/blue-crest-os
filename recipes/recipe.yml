@@ -53,7 +53,6 @@ modules:
         - tailscale
 
         # Wallpapers
-        - fedora-backgrounds
         - fedora-workstation-backgrounds
         - f40-backgrounds
         - f41-backgrounds
