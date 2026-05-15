@@ -27,7 +27,7 @@ modules:
         - lxqt-about
 
         # LXQt Wayland / Wayfire session
-        - wayfire-lxqt-session
+        - lxqt-wayfire-session
         - wayfire
         - wayfire-plugins-extra
         - wf-shell
