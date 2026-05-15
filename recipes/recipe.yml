@@ -26,6 +26,16 @@ modules:
         - lxqt-archiver
         - lxqt-about
 
+        # LXQt Wayland / Wayfire session
+        - wayfire-lxqt-session
+        - wayfire
+        - wayfire-plugins-extra
+        - wf-shell
+        - wlogout
+        - swaybg
+        - swaylock
+        - xdg-desktop-portal-wlr
+
         # Windowing + core tools
         - openbox
         - obconf
@@ -46,9 +56,6 @@ modules:
         - podman
         - distrobox
 
-        # UX additions
-        - rofi
-
         # Tailscale
         - tailscale
 
@@ -67,6 +74,23 @@ modules:
         - kvantum
         - kvantum-qt5
         - kvantum-qt6
+
+    remove:
+      packages:
+        # GNOME / GTK apps removed for a cleaner LXQt image
+        - gnome-connections
+        - gnome-calendar
+        - simple-scan
+        - evince
+        - pinta
+        - gnome-calculator
+        - gnome-contacts
+        - snapshot
+        - gnome-maps
+        - gnome-sound-recorder
+        - smile
+        - gnome-weather
+        - rofi
 
   - type: systemd
     system:
