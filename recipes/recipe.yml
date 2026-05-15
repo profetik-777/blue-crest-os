@@ -28,13 +28,9 @@ modules:
 
         # LXQt Wayland / Wayfire session
         - lxqt-wayfire-session
-        - wayfire
-        - wayfire-plugins-extra
+        - wayfire-config-manager
+        - wayland-logout
         - wf-shell
-        - wlogout
-        - swaybg
-        - swaylock
-        - xdg-desktop-portal-wlr
 
         # Windowing + core tools
         - openbox
