@@ -31,7 +31,7 @@ modules:
         - wayfire-config-manager
         - wayland-logout
         - wf-shell
-        - nwg-panel
+        - nwg-panel.noarch
 
         # Launchers
         - kupfer
