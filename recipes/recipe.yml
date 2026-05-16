@@ -31,6 +31,10 @@ modules:
         - wayfire-config-manager
         - wayland-logout
         - wf-shell
+        - nwg-panel
+
+        # Launchers
+        - kupfer
 
         # Windowing + core tools
         - openbox
