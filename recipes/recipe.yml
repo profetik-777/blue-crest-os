@@ -33,9 +33,6 @@ modules:
         - wf-shell
         - nwg-panel.noarch
 
-        # Launchers
-        - kupfer
-
         # Windowing + core tools
         - openbox
         - obconf
