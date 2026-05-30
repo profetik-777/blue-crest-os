@@ -26,12 +26,12 @@ modules:
         - lxqt-archiver
         - lxqt-about
 
-        # LXQt Wayland / Wayfire session
-        - lxqt-wayfire-session
-        - wayfire-config-manager
-        - wayland-logout
-        - wf-shell
-        - nwg-panel.noarch
+        # LXQt X11 session support
+        - xorg-x11-server-Xorg
+        - xorg-x11-xauth
+        - xorg-x11-xinit
+        - xorg-x11-utils
+        - xorg-x11-drv-libinput
 
         # Windowing + core tools
         - openbox
@@ -88,6 +88,13 @@ modules:
         - smile
         - gnome-weather
         - rofi
+
+        # Remove LXQt Wayland / Wayfire session pieces
+        - lxqt-wayfire-session
+        - wayfire-config-manager
+        - wayland-logout
+        - wf-shell
+        - nwg-panel.noarch
 
   - type: systemd
     system:
