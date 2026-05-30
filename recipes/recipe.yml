@@ -33,7 +33,9 @@ modules:
 
         # KWin Wayland compositor support
         - kwin
-        - plasma-workspace-wayland
+        - kwin-common
+        - kwin-libs
+        - kwin-zones
         - kscreen
         - layer-shell-qt
 
@@ -106,6 +108,10 @@ modules:
         - xorg-x11-drv-libinput
         - openbox
         - obconf
+
+        # Avoid X11-specific KWin components
+        - kwin-x11
+        - kwin-x11-libs
 
   - type: systemd
     system:
