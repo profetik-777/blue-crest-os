@@ -38,6 +38,8 @@ modules:
         - kwin-zones
         - kscreen
         - layer-shell-qt
+        - plasma-systemsettings
+        - arc-kde-decorations
 
         # LXQt apps + core tools
         - pcmanfm-qt
@@ -78,7 +80,6 @@ modules:
 
     remove:
       packages:
-        # GNOME / GTK apps removed for a cleaner LXQt image
         - gnome-connections
         - gnome-calendar
         - simple-scan
@@ -92,15 +93,11 @@ modules:
         - smile
         - gnome-weather
         - rofi
-
-        # Remove LXQt Wayfire session pieces
         - lxqt-wayfire-session
         - wayfire-config-manager
         - wayland-logout
         - wf-shell
         - nwg-panel.noarch
-
-        # Remove X11 session pieces now that Fedora 44 is Wayland-first
         - xorg-x11-server-Xorg
         - xorg-x11-xauth
         - xorg-x11-xinit
@@ -108,8 +105,6 @@ modules:
         - xorg-x11-drv-libinput
         - openbox
         - obconf
-
-        # Avoid X11-specific KWin components
         - kwin-x11
         - kwin-x11-libs
 
