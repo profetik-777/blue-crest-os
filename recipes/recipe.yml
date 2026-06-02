@@ -30,6 +30,7 @@ modules:
         - lxqt-wayland-session
         - qt6-qtwayland
         - xorg-x11-server-Xwayland
+        - kanshi
 
         # KWin Wayland compositor support
         - kwin
@@ -58,6 +59,14 @@ modules:
         # Containers + dev workflow
         - podman
         - distrobox
+        - geany
+        - geany-themes
+        - geany-plugin-addons
+        - gnome-boxes
+        - filezilla
+        - virt-manager
+        - tmux
+        - terminator
 
         # Tailscale
         - tailscale
