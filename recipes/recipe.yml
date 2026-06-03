@@ -102,20 +102,8 @@ modules:
         - smile
         - gnome-weather
         - rofi
-        - lxqt-wayfire-session
-        - wayfire-config-manager
         - wayland-logout
-        - wf-shell
-        - nwg-panel.noarch
-        - xorg-x11-server-Xorg
-        - xorg-x11-xauth
-        - xorg-x11-xinit
-        - xorg-x11-utils
-        - xorg-x11-drv-libinput
-        - openbox
-        - obconf
-        - kwin-x11
-        - kwin-x11-libs
+       
 
   - type: systemd
     system:
