@@ -61,7 +61,7 @@ modules:
         - distrobox
         - geany
         - geany-themes
-        - geany-plugin-addons
+        - geany-plugins-addons
         - gnome-boxes
         - filezilla
         - virt-manager
