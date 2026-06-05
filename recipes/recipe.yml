@@ -41,6 +41,7 @@ modules:
         - layer-shell-qt
         - plasma-systemsettings
         - arc-kde-decorations
+        - kscreen.x86_64
 
         # LXQt apps + core tools
         - pcmanfm-qt
