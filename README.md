@@ -1,6 +1,8 @@
 # Blue Crest OS
 
-A lightweight Sway desktop on **Universal Blue**, built with BlueBuild.
+**Blue Crest OS** is an experimental, lightweight Sway tiling desktop built on Universal Blue with BlueBuild. The project has evolved from its original LXQt desktop into a keyboard-friendly, Wayland-native environment that keeps useful graphical tools close at hand.
+
+**Where we're headed:** Future releases will focus on making tiling window managers easier to approach, especially for people trying one for the first time. The goal is to keep Sway's speed and flexibility while improving onboarding, discoverability, sensible defaults, and everyday desktop conveniences. It is a work in progress rather than a finished beginner-friendly distribution.
 
 The base remains `ghcr.io/ublue-os/base-main`. Fedora's `sway-config-fedora`
 and `sway-systemd` provide the session integration used by Fedora Sway.
