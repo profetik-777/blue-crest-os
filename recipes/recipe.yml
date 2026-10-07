@@ -15,6 +15,8 @@ modules:
     - sway-systemd
     - sddm-wayland-sway
     - foot
+    - terminator
+    - kitty
     - rofi-wayland
     - waybar
     - swaybg
@@ -43,7 +45,6 @@ modules:
     - kanshi
     - pcmanfm-qt
     - lxqt-archiver
-    - qterminal
     - sddm
     - sddm-themes
     - network-manager-applet
@@ -57,11 +58,12 @@ modules:
     - geany-themes
     - geany-plugins-addons
     - gnome-boxes
-    - filezilla
     - virt-manager
+    - filezilla
     - tmux
-    - terminator
     - tailscale
+    - waydroid
+    - waydroid-selinux
     - fedora-workstation-backgrounds
     - f40-backgrounds
     - f41-backgrounds
@@ -70,10 +72,6 @@ modules:
     - adwaita-icon-theme
     - breeze-icon-theme
     - breeze-cursor-theme
-    - breeze-gtk
-    - kvantum
-    - kvantum-qt5
-    - kvantum-qt6
   remove:
     packages:
     - gnome-connections
@@ -92,7 +90,6 @@ modules:
   repos:
     files:
     - bluecrest-nwg.repo
-    - bluecrest-waypaper.repo
     cleanup: true
   install:
     packages:
@@ -100,9 +97,6 @@ modules:
       packages:
       - nwg-displays
       - nwg-look
-    - repo: bluecrest-waypaper
-      packages:
-      - waypaper
 - type: files
   files:
   - source: system
@@ -127,7 +121,7 @@ modules:
     - com.github.tchx84.Flatseal
     - io.gitlab.adhami3310.Impression
     - org.remmina.Remmina
-    - org.kde.konsole
+    - com.google.AndroidStudio
   - scope: user
 - type: brew
   nofile-limits: true
