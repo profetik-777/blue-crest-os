@@ -10,15 +10,13 @@ Fedora is pinned to **44** so desktop packages and the selected COPR builds agre
 ## Included software
 
 - Sway, SDDM with its Sway greeter, Waybar, Rofi, Foot, Mako, Swaylock and Swayidle.
-- Waypaper with the static `swaybg` backend; nwg-displays and nwg-look.
+- nwg-displays and nwg-look for display and appearance controls.
 - Audio/network controls, clipboard history, screenshots, media and brightness keys.
-- PCManFM-Qt, LXQt Archiver, QTerminal, FileZilla, tmux and Terminator retained.
+- PCManFM-Qt, LXQt Archiver, FileZilla, tmux, Kitty and Terminator retained.
 - Podman, Distrobox, Homebrew, Geany (themes/addons), virt-manager and GNOME Boxes.
-- Herdr **v0.9.3**, installed from the official release with a pinned SHA-256.
-  Update Herdr through an image update, not `herdr update` against read-only `/usr`.
 - Tailscale with `tailscaled.service` enabled. Authenticate with `sudo tailscale up`.
 - System Flatpaks: Firefox, Bazaar, DistroShelf, Flatseal, Impression, Remmina,
-  and Konsole (`org.kde.konsole`). These are provisioned after boot by BlueBuild's
+  and Android Studio. These are provisioned after boot by BlueBuild's
   default-flatpaks service and need internet access on first installation.
 
 LXQt's desktop session/panel and KWin are replaced. Its small PolicyKit agent
@@ -34,7 +32,6 @@ an old session. Existing user files are not overwritten.
 - **Super + F1**: searchable shortcut guide.
 - **Super + D**: app launcher; **Super + Enter**: native Foot terminal.
 - **Super + Shift + Enter**: file manager.
-- **Super + Shift + P**: wallpaper picker. Selections restore on login/reload.
 - **Super + Shift + V**: clipboard history (text and images).
 - **Super + Shift + X**: lock. Idle lock occurs after five minutes by default.
 - **Print**, **Ctrl + Print**, **Alt + Print**: output, region, or window screenshot.
@@ -44,7 +41,7 @@ Clipboard history persists locally. Clear it with `cliphist wipe`; disable the
 Kanshi is installed but not started automatically, to avoid competing with
 nwg-displays. Choose one monitor management approach if adding docking profiles.
 
-Fedora's default background remains until you choose one in Waypaper.
+The Fedora background packages remain installed, but Blue Crest does not currently ship a dedicated wallpaper picker.
 The theme editor changes GTK settings; retained Qt applications may require
 separate Qt/Kvantum settings.
 
@@ -64,11 +61,9 @@ Back up custom configs before adapting them. No migration deletes user settings.
 ## Package sources
 
 The desktop and original RPM apps use the base image/Fedora repositories.
-Only `nwg-look` and `nwg-displays` come from `tofik/nwg-shell` COPR; only
-`waypaper` comes from `nett00n/hyprland` COPR. Local repo definitions use
-`includepkgs`, verify RPM signatures, and are removed after the build.
-Those community repositories cannot supply replacement Sway or wlroots packages.
-Herdr's pinned binary comes from `herdrdev/herdr` GitHub releases.
+Only `nwg-look` and `nwg-displays` come from `tofik/nwg-shell` COPR. The local repo definition uses
+`includepkgs`, verifies RPM signatures, and is removed after the build.
+That community repository cannot supply replacement Sway or wlroots packages.
 Homebrew uses BlueBuild's brew module. Flatpaks use Flathub.
 
 ## Install or update
@@ -94,8 +89,7 @@ a reboot. The published `latest` image tag follows this recipe, currently Fedora
 
 ## Validation and recovery
 
-The GitHub Actions build installs the packages, verifies Herdr's checksum and
-checks required desktop commands/session integration. Local helper checks:
+The GitHub Actions build installs the packages and checks required desktop commands/session integration. Local helper checks:
 
 ```sh
 python3 tests/check-desktop.py
@@ -104,7 +98,7 @@ python3 tests/check-desktop.py
 A successful container build does not replace a hardware boot test. Verify login,
 Wi-Fi, audio, suspend/lock, display scaling and browser screen sharing on the
 actual laptop. The additional software increases disk usage; virtualization apps
-and Herdr do not start automatically.
+do not start automatically.
 
 If the desktop fails, select the previous deployment from the boot menu, or run
 `sudo rpm-ostree rollback` from a working terminal and reboot.
