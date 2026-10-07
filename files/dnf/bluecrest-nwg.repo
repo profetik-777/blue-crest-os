@@ -1,0 +1,8 @@
+[bluecrest-nwg]
+name=Blue Crest selected nwg tools (tofik/nwg-shell COPR)
+baseurl=https://download.copr.fedorainfracloud.org/results/tofik/nwg-shell/fedora-$releasever-$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/tofik/nwg-shell/pubkey.gpg
+skip_if_unavailable=0
+includepkgs=nwg-displays nwg-look

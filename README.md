@@ -1,43 +1,110 @@
-# BlueBuild Template &nbsp; [![bluebuild build badge](https://github.com/blue-build/template/actions/workflows/build.yml/badge.svg)](https://github.com/blue-build/template/actions/workflows/build.yml)
+# Blue Crest OS
 
-See the [BlueBuild docs](https://blue-build.org/how-to/setup/) for quick setup instructions for setting up your own repository based on this template.
+A lightweight Sway desktop on **Universal Blue**, built with BlueBuild.
 
-After setup, it is recommended you update this README to describe your custom image.
+The base remains `ghcr.io/ublue-os/base-main`. Fedora's `sway-config-fedora`
+and `sway-systemd` provide the session integration used by Fedora Sway.
+This is a custom uBlue image, not a rebase to Fedora's Sway Atomic registry image.
+Fedora is pinned to **44** so desktop packages and the selected COPR builds agree.
 
-## Installation
+## Included software
 
-> [!WARNING]  
-> [This is an experimental feature](https://www.fedoraproject.org/wiki/Changes/OstreeNativeContainerStable), try at your own discretion.
+- Sway, SDDM with its Sway greeter, Waybar, Rofi, Foot, Mako, Swaylock and Swayidle.
+- Waypaper with the static `swaybg` backend; nwg-displays and nwg-look.
+- Audio/network controls, clipboard history, screenshots, media and brightness keys.
+- PCManFM-Qt, LXQt Archiver, QTerminal, FileZilla, tmux and Terminator retained.
+- Podman, Distrobox, Homebrew, Geany (themes/addons), virt-manager and GNOME Boxes.
+- Herdr **v0.9.3**, installed from the official release with a pinned SHA-256.
+  Update Herdr through an image update, not `herdr update` against read-only `/usr`.
+- Tailscale with `tailscaled.service` enabled. Authenticate with `sudo tailscale up`.
+- System Flatpaks: Firefox, Bazaar, DistroShelf, Flatseal, Impression, Remmina,
+  and Konsole (`org.kde.konsole`). These are provisioned after boot by BlueBuild's
+  default-flatpaks service and need internet access on first installation.
 
-To rebase an existing atomic Fedora installation to the latest build:
+LXQt's desktop session/panel and KWin are replaced. Its small PolicyKit agent
+remains because Fedora's Sway configuration uses it for authentication dialogs.
+The existing wallpaper and icon/theme packages are retained.
 
-- First rebase to the unsigned image, to get the proper signing keys and policies installed:
-  ```
-  rpm-ostree rebase ostree-unverified-registry:ghcr.io/blue-build/template:latest
-  ```
-- Reboot to complete the rebase:
-  ```
-  systemctl reboot
-  ```
-- Then rebase to the signed image, like so:
-  ```
-  rpm-ostree rebase ostree-image-signed:docker://ghcr.io/blue-build/template:latest
-  ```
-- Reboot again to complete the installation
-  ```
-  systemctl reboot
-  ```
+## First login
 
-The `latest` tag will automatically point to the latest build. That build will still always use the Fedora version specified in `recipe.yml`, so you won't get accidentally updated to the next major version.
+Select **Sway** in SDDM after updating from the old LXQt image. SDDM may remember
+an old session. Existing user files are not overwritten.
 
-## ISO
+- **Super + comma** or the **Settings** button: desktop settings menu.
+- **Super + F1**: searchable shortcut guide.
+- **Super + D**: app launcher; **Super + Enter**: native Foot terminal.
+- **Super + Shift + Enter**: file manager.
+- **Super + Shift + P**: wallpaper picker. Selections restore on login/reload.
+- **Super + Shift + V**: clipboard history (text and images).
+- **Super + Shift + X**: lock. Idle lock occurs after five minutes by default.
+- **Print**, **Ctrl + Print**, **Alt + Print**: output, region, or window screenshot.
 
-If build on Fedora Atomic, you can generate an offline ISO with the instructions available [here](https://blue-build.org/how-to/generate-iso/#_top). These ISOs cannot unfortunately be distributed on GitHub for free due to large sizes, so for public projects something else has to be used for hosting.
+Clipboard history persists locally. Clear it with `cliphist wipe`; disable the
+`wl-paste` lines in your override if you do not want clipboard history.
+Kanshi is installed but not started automatically, to avoid competing with
+nwg-displays. Choose one monitor management approach if adding docking profiles.
 
-## Verification
+Fedora's default background remains until you choose one in Waypaper.
+The theme editor changes GTK settings; retained Qt applications may require
+separate Qt/Kvantum settings.
 
-These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo and running the following command:
+## Configuration
 
-```bash
-cosign verify --key cosign.pub ghcr.io/blue-build/template
+System conveniences live in `/etc/sway/config.d/99-bluecrest.conf`.
+Fedora's layered-include mechanism lets you override a file by creating one with
+the same name under `~/.config/sway/config.d/`.
+The bar override is `90-bar.conf`. Supply `~/.config/waybar/config` or
+`config.jsonc` to use your own bar; otherwise the image uses the small Blue Crest
+bar in `/usr/share/bluecrest/`.
+
+A pre-existing `~/.config/sway/config` takes precedence over Fedora's main config.
+It must use Fedora's layered-include mechanism to pick up these snippets.
+Back up custom configs before adapting them. No migration deletes user settings.
+
+## Package sources
+
+The desktop and original RPM apps use the base image/Fedora repositories.
+Only `nwg-look` and `nwg-displays` come from `tofik/nwg-shell` COPR; only
+`waypaper` comes from `nett00n/hyprland` COPR. Local repo definitions use
+`includepkgs`, verify RPM signatures, and are removed after the build.
+Those community repositories cannot supply replacement Sway or wlroots packages.
+Herdr's pinned binary comes from `herdrdev/herdr` GitHub releases.
+Homebrew uses BlueBuild's brew module. Flatpaks use Flathub.
+
+## Install or update
+
+Wait for the image build to succeed before rebasing.
+From an existing Fedora Atomic system, first install the image's trust policy:
+
+```sh
+sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/profetik-777/blue-crest-os:latest
+systemctl reboot
 ```
+
+Then select the signed image and reboot:
+
+```sh
+sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/profetik-777/blue-crest-os:latest
+systemctl reboot
+```
+
+Existing Blue Crest installations can use `sudo rpm-ostree upgrade` followed by
+a reboot. The published `latest` image tag follows this recipe, currently Fedora
+44; it does not imply tracking the base image's unpinned `latest` tag.
+
+## Validation and recovery
+
+The GitHub Actions build installs the packages, verifies Herdr's checksum and
+checks required desktop commands/session integration. Local helper checks:
+
+```sh
+python3 tests/check-desktop.py
+```
+
+A successful container build does not replace a hardware boot test. Verify login,
+Wi-Fi, audio, suspend/lock, display scaling and browser screen sharing on the
+actual laptop. The additional software increases disk usage; virtualization apps
+and Herdr do not start automatically.
+
+If the desktop fails, select the previous deployment from the boot menu, or run
+`sudo rpm-ostree rollback` from a working terminal and reboot.

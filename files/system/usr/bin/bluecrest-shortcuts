@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+set -euo pipefail
+rofi -dmenu -i -p 'Shortcuts (Super = logo key)' < /usr/share/bluecrest/shortcuts.txt >/dev/null || true

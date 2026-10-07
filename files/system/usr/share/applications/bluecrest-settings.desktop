@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Desktop Settings
+Comment=Wallpaper, displays, sound, network and session controls
+Exec=bluecrest-settings
+Icon=preferences-system
+Categories=Settings;
+OnlyShowIn=sway;

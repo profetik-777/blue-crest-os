@@ -1,131 +1,134 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-
+# Keep the uBlue base; Fedora Sway packages supply the desktop.
+# Pin Fedora 44 to match the verified community package repositories.
 name: blue-crest-os
-description: Blue Crest OS - LXQt-based Universal Blue image
-
+description: Blue Crest OS - lightweight Sway desktop on Universal Blue
 base-image: ghcr.io/ublue-os/base-main
-image-version: latest
-
+image-version: '44'
 modules:
-  - type: dnf
+- type: dnf
+  install:
+    packages:
+    - sway
+    - sway-config-fedora
+    - sway-systemd
+    - sddm-wayland-sway
+    - foot
+    - rofi-wayland
+    - waybar
+    - swaybg
+    - swayidle
+    - swaylock
+    - mako
+    - lxqt-policykit
+    - xdg-desktop-portal-wlr
+    - xdg-desktop-portal-gtk
+    - gnome-keyring
+    - pipewire
+    - pipewire-pulseaudio
+    - wireplumber
+    - pavucontrol
+    - brightnessctl
+    - playerctl
+    - grim
+    - slurp
+    - grimshot
+    - wl-clipboard
+    - cliphist
+    - libnotify
+    - dejavu-sans-fonts
+    - qt6-qtwayland
+    - xorg-x11-server-Xwayland
+    - kanshi
+    - pcmanfm-qt
+    - lxqt-archiver
+    - qterminal
+    - sddm
+    - sddm-themes
+    - network-manager-applet
+    - nm-connection-editor
+    - firewall-config
+    - xdg-user-dirs
+    - upower
+    - podman
+    - distrobox
+    - geany
+    - geany-themes
+    - geany-plugins-addons
+    - gnome-boxes
+    - filezilla
+    - virt-manager
+    - tmux
+    - terminator
+    - tailscale
+    - fedora-workstation-backgrounds
+    - f40-backgrounds
+    - f41-backgrounds
+    - f42-backgrounds
+    - papirus-icon-theme
+    - adwaita-icon-theme
+    - breeze-icon-theme
+    - breeze-cursor-theme
+    - breeze-gtk
+    - kvantum
+    - kvantum-qt5
+    - kvantum-qt6
+  remove:
+    packages:
+    - gnome-connections
+    - gnome-calendar
+    - simple-scan
+    - evince
+    - pinta
+    - gnome-calculator
+    - gnome-contacts
+    - snapshot
+    - gnome-maps
+    - gnome-sound-recorder
+    - smile
+    - gnome-weather
+- type: dnf
+  repos:
+    files:
+    - bluecrest-nwg.repo
+    - bluecrest-waypaper.repo
+    cleanup: true
+  install:
+    packages:
+    - repo: bluecrest-nwg
+      packages:
+      - nwg-displays
+      - nwg-look
+    - repo: bluecrest-waypaper
+      packages:
+      - waypaper
+- type: files
+  files:
+  - source: system
+    destination: /
+- type: script
+  scripts:
+  - install-herdr.sh
+  - configure-sway.sh
+- type: systemd
+  system:
+    enabled:
+    - sddm.service
+    - tailscaled.service
+- type: default-flatpaks
+  configurations:
+  - notify: true
+    scope: system
     install:
-      packages:
-        # LXQt core
-        - lxqt-session
-        - lxqt-panel
-        - lxqt-config
-        - lxqt-runner
-        - lxqt-globalkeys
-        - lxqt-notificationd
-        - lxqt-powermanagement
-        - lxqt-policykit
-        - lxqt-qtplugin
-        - lxqt-themes
-        - lxqt-themes-fedora
-        - lxqt-archiver
-        - lxqt-about
-
-        # LXQt Wayland session support
-        - lxqt-wayland-session
-        - qt6-qtwayland
-        - xorg-x11-server-Xwayland
-        - kanshi
-
-        # KWin Wayland compositor support
-        - kwin
-        - kwin-common
-        - kwin-libs
-        - kwin-zones
-        - kscreen
-        - layer-shell-qt
-        - plasma-systemsettings
-        - arc-kde-decorations
-        - kscreen.x86_64
-
-        # LXQt apps + core tools
-        - pcmanfm-qt
-        - qterminal
-
-        # System essentials
-        - sddm
-        - sddm-themes
-        - network-manager-applet
-        - nm-connection-editor
-        - firewall-config
-        - xdg-user-dirs
-        - upower
-        - xdg-desktop-portal-kde
-
-        # Containers + dev workflow
-        - podman
-        - distrobox
-        - geany
-        - geany-themes
-        - geany-plugins-addons
-        - gnome-boxes
-        - filezilla
-        - virt-manager
-        - tmux
-        - terminator
-
-        # Tailscale
-        - tailscale
-
-        # Wallpapers
-        - fedora-workstation-backgrounds
-        - f40-backgrounds
-        - f41-backgrounds
-        - f42-backgrounds
-
-        # Theme polish
-        - papirus-icon-theme
-        - adwaita-icon-theme
-        - breeze-icon-theme
-        - breeze-cursor-theme
-        - breeze-gtk
-        - kvantum
-        - kvantum-qt5
-        - kvantum-qt6
-
-    remove:
-      packages:
-        - gnome-connections
-        - gnome-calendar
-        - simple-scan
-        - evince
-        - pinta
-        - gnome-calculator
-        - gnome-contacts
-        - snapshot
-        - gnome-maps
-        - gnome-sound-recorder
-        - smile
-        - gnome-weather
-        - rofi
-        - wayland-logout
-       
-
-  - type: systemd
-    system:
-      enabled:
-        - sddm.service
-        - tailscaled.service
-
-  - type: default-flatpaks
-    configurations:
-      - notify: true
-        scope: system
-        install:
-          - org.mozilla.firefox
-          - io.github.kolunmi.Bazaar
-          - com.ranfdev.DistroShelf
-          - com.github.tchx84.Flatseal
-          - io.gitlab.adhami3310.Impression
-          - org.remmina.Remmina
-      - scope: user
-
-  - type: brew
-    nofile-limits: true
-
-  - type: signing
+    - org.mozilla.firefox
+    - io.github.kolunmi.Bazaar
+    - com.ranfdev.DistroShelf
+    - com.github.tchx84.Flatseal
+    - io.gitlab.adhami3310.Impression
+    - org.remmina.Remmina
+    - org.kde.konsole
+  - scope: user
+- type: brew
+  nofile-limits: true
+- type: signing

@@ -1,0 +1,64 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 30,
+  "spacing": 6,
+  "modules-left": [
+    "custom/settings",
+    "sway/workspaces",
+    "sway/mode"
+  ],
+  "modules-center": [
+    "sway/window"
+  ],
+  "modules-right": [
+    "pulseaudio",
+    "network",
+    "battery",
+    "clock",
+    "tray"
+  ],
+  "custom/settings": {
+    "format": "Settings",
+    "tooltip": false,
+    "on-click": "bluecrest-settings",
+    "on-click-right": "bluecrest-shortcuts"
+  },
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": false
+  },
+  "sway/window": {
+    "max-length": 28
+  },
+  "pulseaudio": {
+    "format": "Vol {volume}%",
+    "format-muted": "Muted",
+    "on-click": "pavucontrol",
+    "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+  },
+  "network": {
+    "format-wifi": "Wi-Fi {signalStrength}%",
+    "format-ethernet": "Wired",
+    "format-disconnected": "Offline",
+    "tooltip-format": "{ifname}: {ipaddr}",
+    "on-click": "nm-connection-editor",
+    "interval": 10
+  },
+  "battery": {
+    "format": "Bat {capacity}%",
+    "format-charging": "Charging {capacity}%",
+    "states": {
+      "warning": 25,
+      "critical": 10
+    },
+    "interval": 30
+  },
+  "clock": {
+    "format": "{:%a %H:%M}",
+    "tooltip-format": "{:%Y-%m-%d}"
+  },
+  "tray": {
+    "spacing": 8
+  }
+}

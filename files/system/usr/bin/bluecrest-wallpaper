@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cfg=${XDG_CONFIG_HOME:-$HOME/.config}/waypaper/config.ini
+# Leave Fedora's default background until the user selects a wallpaper.
+if [[ -f "$cfg" ]]; then
+    exec waypaper --restore --backend swaybg
+fi

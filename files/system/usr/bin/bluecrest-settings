@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+choice=$(printf '%s\n' 'Wallpaper' 'Displays' 'Appearance' 'Sound' 'Network' 'Files' 'Clipboard' 'Keyboard shortcuts' 'Lock' 'Suspend' 'Log out' 'Restart' 'Shut down' | rofi -dmenu -i -p 'Desktop Settings') || exit 0
+case "$choice" in
+    Wallpaper) exec waypaper --backend swaybg ;;
+    Displays) exec nwg-displays ;;
+    Appearance) exec nwg-look ;;
+    Sound) exec pavucontrol ;;
+    Network) exec nm-connection-editor ;;
+    Files) exec pcmanfm-qt ;;
+    Clipboard) exec bluecrest-clipboard ;;
+    'Keyboard shortcuts') exec bluecrest-shortcuts ;;
+    Lock) exec loginctl lock-session ;;
+    Suspend) swaylock -f && systemctl suspend ;;
+    'Log out'|'Restart'|'Shut down')
+        confirm=$(printf '%s\n' Cancel Confirm | rofi -dmenu -p "$choice?") || exit 0
+        [[ "$confirm" == Confirm ]] || exit 0
+        case "$choice" in
+            'Log out') exec swaymsg exit ;;
+            Restart) exec systemctl reboot ;;
+            'Shut down') exec systemctl poweroff ;;
+        esac ;;
+esac

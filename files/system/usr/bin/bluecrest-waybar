@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cfg=${XDG_CONFIG_HOME:-$HOME/.config}/waybar
+if [[ -f "$cfg/config" || -f "$cfg/config.jsonc" ]]; then
+    exec waybar "$@"
+fi
+exec waybar -c /usr/share/bluecrest/waybar.json -s /usr/share/bluecrest/waybar.css "$@"
