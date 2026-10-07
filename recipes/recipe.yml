@@ -103,7 +103,6 @@ modules:
     destination: /
 - type: script
   scripts:
-  - install-herdr.sh
   - configure-sway.sh
 - type: systemd
   system:
