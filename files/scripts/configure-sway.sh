@@ -4,7 +4,7 @@ set -euo pipefail
 test -f /usr/share/wayland-sessions/sway.desktop
 test -f /usr/libexec/sway/layered-include
 grep -q layered-include /etc/sway/config
-for cmd in sway waybar rofi waypaper nwg-displays nwg-look cliphist grimshot herdr; do
+for cmd in sway waybar rofi nwg-displays nwg-look cliphist grimshot; do
     command -v "$cmd"
 done
 chmod 0755 /usr/bin/bluecrest-*
