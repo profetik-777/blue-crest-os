@@ -34,8 +34,12 @@ an old session. Existing user files are not overwritten.
 
 - **Super + comma** or the **Settings** button: desktop settings menu.
 - **Super + F1**: searchable shortcut guide.
-- **Super + D**: app launcher; **Super + Enter**: native Foot terminal.
+- **Ctrl + Space**: app launcher; **Super + Enter**: native Foot terminal.
 - **Super + Shift + Enter**: file manager.
+- **Super + Q**: close the focused window.
+- **Four-finger swipe left/right**: previous/next workspace on the current monitor.
+- Workspaces **1, 2, 3** stay visible in the bar; Foot defaults to **12-point** text.
+- The bar clock uses **12-hour time with AM/PM**.
 - **Super + Shift + V**: clipboard history (text and images).
 - **Super + Shift + X**: lock. Idle lock occurs after five minutes by default.
 - **Print**, **Ctrl + Print**, **Alt + Print**: output, region, or window screenshot.
@@ -45,7 +49,13 @@ Clipboard history persists locally. Clear it with `cliphist wipe`; disable the
 Kanshi is installed but not started automatically, to avoid competing with
 nwg-displays. Choose one monitor management approach if adding docking profiles.
 
-The Fedora background packages remain installed, but Blue Crest does not currently ship a dedicated wallpaper picker.
+Search **wallpaper** or **backgrounds** in the app launcher to open the terminal
+wallpaper picker. Choose **All monitors** or a specific monitor, then an image.
+It starts in `~/Pictures/Wallpapers`; `/` filters names, `p` accepts a path, and
+`m` cycles scaling modes. Selections persist in user-owned Sway snippets.
+Selecting a laptop wallpaper also supplies a fallback to newly connected screens;
+explicit monitor choices take precedence. No personal images, monitor positions,
+or sleep/graphics workarounds are shipped.
 The theme editor changes GTK settings; retained Qt applications may require
 separate Qt/Kvantum settings.
 

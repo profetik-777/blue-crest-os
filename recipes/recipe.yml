@@ -20,6 +20,7 @@ modules:
     - rofi-wayland
     - waybar
     - swaybg
+    - python3
     - swayidle
     - swaylock
     - mako

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Wallpaper & Backgrounds
+GenericName=Monitor Wallpaper Selector
+Comment=Choose a background image for each Sway monitor
+Keywords=wallpaper;background;backgrounds;monitor;display;
+Exec=/usr/bin/foot --title="Wallpaper & Backgrounds" /usr/bin/python3 /usr/bin/wallpaper-picker
+Icon=preferences-desktop-wallpaper
+Terminal=false
+Categories=Settings;DesktopSettings;
+StartupNotify=false

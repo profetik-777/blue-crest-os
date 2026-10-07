@@ -26,7 +26,12 @@
   },
   "sway/workspaces": {
     "disable-scroll": true,
-    "all-outputs": false
+    "all-outputs": false,
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": []
+    }
   },
   "sway/window": {
     "max-length": 28
@@ -55,7 +60,7 @@
     "interval": 30
   },
   "clock": {
-    "format": "{:%a %H:%M}",
+    "format": "{:%a %I:%M %p}",
     "tooltip-format": "{:%Y-%m-%d}"
   },
   "tray": {

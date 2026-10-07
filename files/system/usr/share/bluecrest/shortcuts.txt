@@ -1,6 +1,6 @@
 Super + Enter           Terminal (Foot)
-Super + D               Applications
-Super + Shift + Q       Close window
+Ctrl + Space            Applications
+Super + Q               Close window
 Super + Arrows          Focus window
 Super + Shift + Arrows  Move window
 Super + 1 to 9          Switch workspace
@@ -21,3 +21,6 @@ Ctrl + Print            Screenshot of selected area
 Alt + Print             Screenshot of active window
 Super + Shift + C       Reload configuration
 Super + Shift + E       Log out prompt
+
+Four-finger swipe left / right   Previous / next workspace on this monitor
+Ctrl + Space: search wallpaper or backgrounds for the wallpaper picker.

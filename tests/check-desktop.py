@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Check Blue Crest desktop helper syntax and static configuration."""
+import ast
+import configparser
 import json
 from pathlib import Path
 import subprocess
@@ -21,4 +23,11 @@ assert "herdr" not in settings.lower()
 assert "waypaper" not in sway.lower()
 assert "bluecrest-wallpaper" not in sway.lower()
 
-print("PASS: shell syntax, bar JSON, and removed-tool references")
+picker = BIN / "wallpaper-picker"
+ast.parse(picker.read_text())
+desktop = configparser.ConfigParser(interpolation=None)
+desktop.read(ROOT / "files/system/usr/share/applications/wallpaper-picker.desktop")
+assert "/usr/bin/wallpaper-picker" in desktop["Desktop Entry"]["Exec"]
+assert "/var/home/" not in desktop["Desktop Entry"]["Exec"]
+subprocess.run(["python3", str(ROOT / "tests/check-wallpaper.py")], check=True)
+print("PASS: shell syntax, bar JSON, wallpaper controls, and removed-tool references")

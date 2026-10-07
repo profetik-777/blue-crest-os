@@ -7,6 +7,8 @@ grep -q layered-include /etc/sway/config
 for cmd in sway waybar rofi nwg-displays nwg-look cliphist grimshot; do
     command -v "$cmd"
 done
-chmod 0755 /usr/bin/bluecrest-*
+chmod 0755 /usr/bin/bluecrest-* /usr/bin/wallpaper-picker
+python3 -c 'import curses'
+foot --check-config --config /etc/xdg/foot/foot.ini
 # SDDM remembers an existing user's previous session; select Sway at login.
 systemctl set-default graphical.target

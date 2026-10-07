@@ -1,0 +1,263 @@
+#!/usr/bin/python3
+"""A standard-library-only, per-monitor wallpaper picker for Sway."""
+import argparse
+import curses
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+CONFIG = Path(os.environ.get('XDG_CONFIG_HOME', Path.home() / '.config'))
+STATE = CONFIG / 'wallpaper-picker' / 'wallpapers.json'
+SWAY_CONFIG = CONFIG / 'sway' / 'config.d' / '98-wallpapers.conf'
+EXTENSIONS = {'.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tif', '.tiff', '.jxl', '.gif'}
+MODES = ['fill', 'fit', 'center', 'stretch', 'tile']
+
+
+def ipc(command):
+    result = subprocess.run(['/usr/bin/swaymsg', '-r', command], capture_output=True,
+                            text=True, timeout=10)
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or result.stdout.strip())
+    replies = json.loads(result.stdout)
+    if any(not item.get('success', False) for item in replies):
+        raise RuntimeError('; '.join(item.get('error', 'Sway rejected wallpaper')
+                                     for item in replies if not item.get('success')))
+
+
+def outputs():
+    result = subprocess.run(['/usr/bin/swaymsg', '-r', '-t', 'get_outputs'],
+                            capture_output=True, text=True, timeout=10)
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or 'Cannot connect to Sway')
+    return sorted([item for item in json.loads(result.stdout)
+                   if item.get('active') and item.get('rect', {}).get('width', 0) > 0
+                   and item.get('rect', {}).get('height', 0) > 0],
+                  key=lambda item: (item['rect']['x'], item['rect']['y'], item['name']))
+
+
+def quote(value):
+    if any(ord(char) < 32 for char in value):
+        raise ValueError('Paths and monitor names must not contain control characters')
+    return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
+
+
+def wallpaper_command(name, path, mode):
+    if mode not in MODES:
+        raise ValueError('Unsupported scaling mode')
+    return f'output {quote(name)} bg {quote(str(path))} {mode}'
+
+
+def read_state():
+    return json.loads(STATE.read_text()) if STATE.exists() else {}
+
+
+def atomic_write(path, text):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + f'.{os.getpid()}.tmp')
+    try:
+        temporary.write_text(text)
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def internal_output(name):
+    return name.startswith(('eDP-', 'LVDS-', 'DSI-'))
+
+
+def commands(state):
+    # A wildcard provides the laptop wallpaper to outputs without a saved rule.
+    # Named rules follow it and preserve each explicitly chosen wallpaper.
+    fallback = state.get('*')
+    if fallback is None:
+        fallback = next((value for name, value in state.items() if internal_output(name)), None)
+    result = []
+    if fallback and Path(fallback['path']).is_file():
+        result.append(wallpaper_command('*', fallback['path'], fallback['mode']))
+    for name, settings in sorted(state.items()):
+        if name != '*' and Path(settings['path']).is_file():
+            result.append(wallpaper_command(name, settings['path'], settings['mode']))
+    return result
+
+
+def save_state(state):
+    atomic_write(STATE, json.dumps(state, indent=2) + '\n')
+    lines = ['# Managed by Wallpaper & Backgrounds.',
+             '# Wildcard fallback first; saved monitor choices override it.']
+    atomic_write(SWAY_CONFIG, '\n'.join(lines + commands(state)) + '\n')
+
+
+def apply(name, path, mode):
+    path = path.expanduser().resolve(strict=True)
+    if not path.is_file() or path.suffix.lower() not in EXTENSIONS:
+        raise ValueError('Choose a supported image file')
+    connected = {item['name'] for item in outputs()}
+    if not connected:
+        raise ValueError('No active monitors; refresh the monitor list')
+    if name != '*' and name not in connected:
+        raise ValueError('Monitor disconnected; refresh the monitor list')
+    state = read_state()
+    settings = {'path': str(path), 'mode': mode}
+    if name == '*':
+        # Reset old overrides so all screens, including future screens, match.
+        state = {output: settings.copy() for output in connected | set(state) if output != '*'}
+        state['*'] = settings.copy()
+    else:
+        state[name] = settings
+        if internal_output(name):
+            state['*'] = settings.copy()
+    # Apply the fallback and then named choices in a single ordered IPC request.
+    ipc('; '.join(commands(state)))
+    save_state(state)
+
+
+def put(screen, row, text, attribute=0):
+    height, width = screen.getmaxyx()
+    if 0 <= row < height:
+        try:
+            screen.addnstr(row, 1, str(text).replace('\n', ' '), max(0, width - 3), attribute)
+        except curses.error:
+            pass
+
+
+def choose(screen, title, entries, footer, subtitle='', selected=0):
+    while True:
+        screen.erase()
+        height, _ = screen.getmaxyx()
+        put(screen, 0, title, curses.A_BOLD)
+        put(screen, 1, subtitle)
+        page = max(1, height - 5)
+        start = max(0, selected - page + 1)
+        for index in range(start, min(len(entries), start + page)):
+            put(screen, index - start + 3, entries[index],
+                curses.A_REVERSE if index == selected else 0)
+        if not entries:
+            put(screen, 3, '(No matching files)')
+        put(screen, height - 1, footer)
+        screen.refresh()
+        key = screen.getch()
+        if key in (curses.KEY_UP, ord('k')):
+            selected = max(0, selected - 1)
+        elif key in (curses.KEY_DOWN, ord('j')):
+            selected = min(max(0, len(entries) - 1), selected + 1)
+        elif key == curses.KEY_NPAGE:
+            selected = min(max(0, len(entries) - 1), selected + page)
+        elif key == curses.KEY_PPAGE:
+            selected = max(0, selected - page)
+        elif key != curses.KEY_RESIZE:
+            return key, selected
+
+
+def prompt(screen, title):
+    screen.erase()
+    put(screen, 0, title, curses.A_BOLD)
+    put(screen, 2, '> ')
+    screen.refresh()
+    curses.echo()
+    curses.curs_set(1)
+    try:
+        return screen.getstr(2, 3, 2048).decode('utf-8').strip()
+    finally:
+        curses.noecho()
+        curses.curs_set(0)
+
+
+def message(screen, text):
+    screen.erase()
+    put(screen, 1, text)
+    put(screen, 3, 'Press any key to continue.')
+    screen.refresh()
+    screen.getch()
+
+
+def browse(screen, directory, output, mode):
+    query = ''
+    display_name = 'all monitors' if output == '*' else output
+    while True:
+        children = sorted(directory.iterdir(), key=lambda p: (not p.is_dir(), p.name.casefold()))
+        items = [directory.parent] + [p for p in children
+            if (p.is_dir() or p.suffix.lower() in EXTENSIONS)
+            and query.casefold() in p.name.casefold() and not p.name.startswith('.')]
+        labels = ['[..]'] + [('[' + p.name + '/]') if p.is_dir() else p.name for p in items[1:]]
+        key, index = choose(screen, f'Choose wallpaper for {display_name} — {mode}', labels,
+                            '↑↓ select | Enter open/apply | / filter | p path | m mode | Esc back',
+                            str(directory) + (f'  Filter: {query}' if query else ''))
+        if key in (27, ord('q')):
+            return directory, mode
+        if key == ord('/'):
+            query = prompt(screen, 'Filter filenames (empty clears filter)')
+        elif key == ord('m'):
+            mode = MODES[(MODES.index(mode) + 1) % len(MODES)]
+        elif key == ord('p'):
+            value = prompt(screen, 'Enter a folder or image path (~/ supported)')
+            if not value:
+                continue
+            path = Path(value).expanduser()
+            if not path.is_absolute():
+                path = directory / path
+            if path.is_dir():
+                directory, query = path.resolve(), ''
+            else:
+                apply(output, path, mode)
+                message(screen, f'Saved wallpaper for {display_name}: {path.name}')
+                return directory, mode
+        elif key in (10, 13, curses.KEY_ENTER):
+            path = items[index]
+            if path.is_dir():
+                directory, query = path.resolve(), ''
+            else:
+                apply(output, path, mode)
+                message(screen, f'Saved wallpaper for {display_name}: {path.name}')
+                return directory, mode
+
+
+def ui(screen):
+    curses.curs_set(0)
+    screen.keypad(True)
+    directory = Path.home() / 'Pictures' / 'Wallpapers'
+    if not directory.is_dir():
+        directory = Path.home()
+    mode = 'fill'
+    while True:
+        try:
+            monitors = outputs()
+            state = read_state()
+            labels = ['All monitors — choose one wallpaper for every screen']
+            for index, output in enumerate(monitors, 1):
+                rect = output['rect']
+                display = ' '.join(str(output.get(k, '')) for k in ('make', 'model'))
+                saved = state.get(output['name'], state.get('*', {})).get('path')
+                labels.append(f'Monitor {index}: {output["name"]} — {display} '
+                              f'({rect["width"]}×{rect["height"]})'
+                              + (f' — {Path(saved).name}' if saved else ''))
+            key, index = choose(screen, 'Wallpaper & Backgrounds', labels,
+                '↑↓ select | Enter choose image | r refresh monitors | q quit',
+                'Choose all or one monitor. New screens inherit the laptop/default wallpaper.')
+            if key in (27, ord('q')):
+                return
+            if key in (10, 13, curses.KEY_ENTER) and monitors:
+                target = '*' if index == 0 else monitors[index - 1]['name']
+                directory, mode = browse(screen, directory, target, mode)
+        except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as error:
+            message(screen, f'Error: {error}')
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--list-monitors', action='store_true')
+    args = parser.parse_args()
+    try:
+        if args.list_monitors:
+            print(json.dumps(outputs(), indent=2))
+        else:
+            curses.wrapper(ui)
+    except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as error:
+        print(f'Wallpaper picker: {error}', file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
