@@ -15,7 +15,6 @@ Super + comma           Desktop Settings
 Super + F1              This shortcut guide
 Super + Shift + V       Clipboard history
 Super + Shift + X       Lock
-Super + Shift + P       Wallpaper picker
 Super + Shift + Enter   File manager
 Print                   Screenshot of output
 Ctrl + Print            Screenshot of selected area
