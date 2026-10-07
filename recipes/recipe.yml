@@ -3,7 +3,7 @@
 # Keep the uBlue base; Fedora Sway packages supply the desktop.
 # Pin Fedora 44 to match the verified community package repositories.
 name: blue-crest-os
-description: Blue Crest OS - lightweight Sway desktop on Universal Blue
+description: Blue Crest OS - an opinionated Sway experience with user-friendly keybindings
 base-image: ghcr.io/ublue-os/base-main
 image-version: '44'
 modules:
