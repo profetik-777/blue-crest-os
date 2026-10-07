@@ -1,6 +1,6 @@
 # Blue Crest OS
 
-**Blue Crest OS** is an experimental, lightweight Sway tiling desktop built on Universal Blue with BlueBuild. The project has evolved from its original LXQt desktop into a keyboard-friendly, Wayland-native environment that keeps useful graphical tools close at hand.
+**Blue Crest OS** is an opinionated Sway experience with user-friendly keybindings, practical desktop tools, and sensible defaults. Built on Universal Blue with BlueBuild, it pairs a lightweight Wayland tiling desktop with approachable keyboard shortcuts and touchpad gestures.
 
 **Where we're headed:** Future releases will focus on making tiling window managers easier to approach, especially for people trying one for the first time. The goal is to keep Sway's speed and flexibility while improving onboarding, discoverability, sensible defaults, and everyday desktop conveniences. It is a work in progress rather than a finished beginner-friendly distribution.
 
