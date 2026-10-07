@@ -17,6 +17,7 @@ Fedora is pinned to **44** so desktop packages and the selected COPR builds agre
 - nwg-displays and nwg-look for display and appearance controls.
 - Audio/network controls, clipboard history, screenshots, media and brightness keys.
 - PCManFM-Qt, LXQt Archiver, FileZilla, tmux, Kitty and Terminator retained.
+- Yazi via Homebrew after first Sway login, with Bash integration and terminal-oriented keys.
 - Podman, Distrobox, Homebrew, Geany (themes/addons), virt-manager and GNOME Boxes.
 - Tailscale with `tailscaled.service` enabled. Authenticate with `sudo tailscale up`.
 - System Flatpaks: Firefox, Bazaar, DistroShelf, Flatseal, Impression, Remmina,
@@ -116,3 +117,31 @@ do not start automatically.
 
 If the desktop fails, select the previous deployment from the boot menu, or run
 `sudo rpm-ostree rollback` from a working terminal and reboot.
+
+## Yazi first-login setup
+
+Thirty seconds after Sway login, a user service installs the bundled Brewfile.
+Internet access and the primary user's Homebrew prefix are required. Failed setup
+retries every five minutes while the session is running; the completion marker is
+written only after installation succeeds. The Brew module owns its prefix for UID
+1000, so this provisioning is intended for that primary user.
+
+Open a new Foot terminal and run `y`. Browse with arrow keys and press **t** or
+**q** to return to the same shell in that folder. **Shift+Q** keeps the original
+folder. **Ctrl+T** creates a new Yazi tab, replacing the default `t t` sequence.
+
+Setup copies the keymap only if `~/.config/yazi/keymap.toml` does not exist.
+Existing keymaps and Bash functions are preserved. To adopt the keys manually,
+merge the entries from `/usr/share/bluecrest/yazi/keymap.toml` into your keymap.
+The Bash wrapper is supplied by `/etc/profile.d/90-bluecrest-yazi.sh`.
+
+Check or retry setup:
+```sh
+systemctl --user status bluecrest-yazi-setup.service
+journalctl --user -u bluecrest-yazi-setup.service
+systemctl --user start bluecrest-yazi-setup.service
+```
+
+The service runs provisioning only; Brew's update timers manage subsequent app
+updates independently of OS image updates. This is a small login service, not a
+new graphical onboarding portal.

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/bluecrest"
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/yazi"
+brew_prefix=/home/linuxbrew/.linuxbrew
+brew_cmd="$brew_prefix/bin/brew"
+defaults=/usr/share/bluecrest
+marker="$state_dir/yazi-v1.complete"
+
+[[ -f "$marker" ]] && exit 0
+# BlueBuild's Homebrew service owns this prefix for the primary user.
+if [[ ! -x "$brew_cmd" || "$(stat -c %u "$brew_prefix")" != "$(id -u)" ]]; then
+    echo "Homebrew is not ready or belongs to another user; retrying later." >&2
+    exit 1
+fi
+export PATH="$brew_prefix/bin:$brew_prefix/sbin:$PATH"
+export HOMEBREW_NO_AUTO_UPDATE=1
+"$brew_cmd" bundle install --file="$defaults/Brewfile" --no-upgrade
+command -v yazi >/dev/null
+mkdir -p "$config_dir" "$state_dir"
+# Existing custom keymaps are never overwritten.
+if [[ ! -e "$config_dir/keymap.toml" ]]; then
+    cp --no-clobber "$defaults/yazi/keymap.toml" "$config_dir/keymap.toml"
+fi
+touch "$marker"
+echo "Yazi ready: open a new terminal, run y, then t to return in that folder."

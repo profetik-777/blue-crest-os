@@ -24,3 +24,6 @@ Super + Shift + E       Log out prompt
 
 Four-finger swipe left / right   Previous / next workspace on this monitor
 Ctrl + Space: search wallpaper or backgrounds for the wallpaper picker.
+
+Yazi: run y in a terminal; t or q returns in the browsed folder.
+Yazi: Shift+Q keeps the original folder; Ctrl+T opens a new tab.

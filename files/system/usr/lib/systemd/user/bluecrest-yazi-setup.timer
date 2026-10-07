@@ -1,0 +1,8 @@
+[Unit]
+Description=Retry Blue Crest Yazi setup after graphical login
+PartOf=sway-session.target
+
+[Timer]
+OnActiveSec=30s
+OnUnitInactiveSec=5min
+Unit=bluecrest-yazi-setup.service

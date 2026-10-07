@@ -1,0 +1,8 @@
+[Unit]
+Description=Install Blue Crest Yazi defaults
+ConditionPathExists=!%h/.local/state/bluecrest/yazi-v1.complete
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bluecrest-yazi-setup
+TimeoutStartSec=20min

@@ -30,4 +30,7 @@ desktop.read(ROOT / "files/system/usr/share/applications/wallpaper-picker.deskto
 assert "/usr/bin/wallpaper-picker" in desktop["Desktop Entry"]["Exec"]
 assert "/var/home/" not in desktop["Desktop Entry"]["Exec"]
 subprocess.run(["python3", str(ROOT / "tests/check-wallpaper.py")], check=True)
-print("PASS: shell syntax, bar JSON, wallpaper controls, and removed-tool references")
+for profile in (ROOT / "files/system/etc/profile.d").glob("*.sh"):
+    subprocess.run(["bash", "-n", str(profile)], check=True)
+subprocess.run(["python3", str(ROOT / "tests/check-yazi.py")], check=True)
+print("PASS: desktop helpers, wallpaper controls, and Yazi first-login setup")

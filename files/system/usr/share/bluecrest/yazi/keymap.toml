@@ -1,0 +1,5 @@
+[mgr]
+prepend_keymap = [
+    { on = "t", run = "quit", desc = "Return to terminal in this folder (launch with y)" },
+    { on = "<C-t>", run = "tab_create --current", desc = "Create a tab in this folder" },
+]

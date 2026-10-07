@@ -12,3 +12,5 @@ python3 -c 'import curses'
 foot --check-config --config /etc/xdg/foot/foot.ini
 # SDDM remembers an existing user's previous session; select Sway at login.
 systemctl set-default graphical.target
+
+bash -n /etc/profile.d/90-bluecrest-yazi.sh
