@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-choice=$(printf '%s\n' 'Wallpaper' 'Displays' 'Appearance' 'Sound' 'Network' 'Files' 'Clipboard' 'Keyboard shortcuts' 'Lock' 'Suspend' 'Log out' 'Restart' 'Shut down' | rofi -dmenu -i -p 'Desktop Settings') || exit 0
+choice=$(printf '%s\n' 'Displays' 'Appearance' 'Sound' 'Network' 'Files' 'Clipboard' 'Keyboard shortcuts' 'Lock' 'Suspend' 'Log out' 'Restart' 'Shut down' | rofi -dmenu -i -p 'Desktop Settings') || exit 0
 case "$choice" in
-    Wallpaper) exec waypaper --backend swaybg ;;
     Displays) exec nwg-displays ;;
     Appearance) exec nwg-look ;;
     Sound) exec pavucontrol ;;
