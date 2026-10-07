@@ -4,6 +4,8 @@
 
 **Where we're headed:** Future releases will focus on making tiling window managers easier to approach, especially for people trying one for the first time. The goal is to keep Sway's speed and flexibility while improving onboarding, discoverability, sensible defaults, and everyday desktop conveniences. It is a work in progress rather than a finished beginner-friendly distribution.
 
+All work is done w/ the help of AI tools. 
+
 The base remains `ghcr.io/ublue-os/base-main`. Fedora's `sway-config-fedora`
 and `sway-systemd` provide the session integration used by Fedora Sway.
 This is a custom uBlue image, not a rebase to Fedora's Sway Atomic registry image.
