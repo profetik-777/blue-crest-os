@@ -15,8 +15,18 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 jobs:
+  desktop-checks:
+    name: Check desktop helpers
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check shell helpers and desktop controls
+        run: python3 tests/check-desktop.py
   bluebuild:
     name: Build Custom Image
+    needs: desktop-checks
     runs-on: ubuntu-latest
     permissions:
       contents: read
