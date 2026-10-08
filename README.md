@@ -15,18 +15,19 @@ Fedora is pinned to **44** so desktop packages and the selected COPR builds agre
 
 - Sway, SDDM with its Sway greeter, Waybar, Rofi, Foot, Mako, Swaylock and Swayidle.
 - nwg-displays and nwg-look for display and appearance controls.
+- 
 - Audio/network controls, clipboard history, screenshots, media and brightness keys.
 - PCManFM-Qt, LXQt Archiver, FileZilla, tmux, Kitty and Terminator retained.
 - Yazi via Homebrew after first Sway login, with Bash integration and terminal-oriented keys.
-- Podman, Distrobox, Homebrew, Geany (themes/addons), virt-manager and GNOME Boxes.
+- Podman, Distrobox, Homebrew, Geany (themes/addons), waydroid, virt-manager and GNOME Boxes.
 - Tailscale with `tailscaled.service` enabled. Authenticate with `sudo tailscale up`.
-- System Flatpaks: Firefox, Bazaar, DistroShelf, Flatseal, Impression, Remmina,
-  ksnip, and Android Studio. These are provisioned after boot by BlueBuild's
+- Ksnip screenshot editor integrated with Sway: press **Print Screen**, drag to select an area,
+  and the capture open ksnip and inserts the image into Ksnip for annotation (Powered by grim and slurp).
+- Flatpaks: Firefox, Bazaar, DistroShelf, Flatseal, Impression, Remmina,
+  and Android Studio. These are provisioned after boot by BlueBuild's
   default-flatpaks service and need internet access on first installation.
 
-LXQt's desktop session/panel and KWin are replaced. Its small PolicyKit agent
-remains because Fedora's Sway configuration uses it for authentication dialogs.
-The existing wallpaper and icon/theme packages are retained.
+
 
 ## First login
 
