@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Select before creating a file; Escape cancels without opening the editor.
+geometry=$(slurp) || exit 0
+[[ -n "$geometry" ]] || exit 0
+directory="$(xdg-user-dir PICTURES)/Screenshots"
+mkdir -p "$directory"
+image=$(mktemp "$directory/Screenshot-$(date +%Y%m%d-%H%M%S)-XXXXXX.png")
+if ! grim -g "$geometry" "$image"; then
+    rm -f -- "$image"
+    notify-send 'Screenshot failed' 'The selected area could not be captured.'
+    exit 1
+fi
+if command -v ksnip >/dev/null 2>&1; then
+    exec ksnip -e "$image"
+elif flatpak info org.ksnip.ksnip >/dev/null 2>&1; then
+    exec flatpak run --file-forwarding org.ksnip.ksnip -e @@ "$image" @@
+fi
+notify-send 'Screenshot saved' "$image — install ksnip to annotate it."

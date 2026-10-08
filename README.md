@@ -21,7 +21,7 @@ Fedora is pinned to **44** so desktop packages and the selected COPR builds agre
 - Podman, Distrobox, Homebrew, Geany (themes/addons), virt-manager and GNOME Boxes.
 - Tailscale with `tailscaled.service` enabled. Authenticate with `sudo tailscale up`.
 - System Flatpaks: Firefox, Bazaar, DistroShelf, Flatseal, Impression, Remmina,
-  and Android Studio. These are provisioned after boot by BlueBuild's
+  ksnip, and Android Studio. These are provisioned after boot by BlueBuild's
   default-flatpaks service and need internet access on first installation.
 
 LXQt's desktop session/panel and KWin are replaced. Its small PolicyKit agent
@@ -43,7 +43,9 @@ an old session. Existing user files are not overwritten.
 - The bar clock uses **12-hour time with AM/PM**.
 - **Super + Shift + V**: clipboard history (text and images).
 - **Super + Shift + X**: lock. Idle lock occurs after five minutes by default.
-- **Print**, **Ctrl + Print**, **Alt + Print**: output, region, or window screenshot.
+- **Print** or **Ctrl + Print**: select an area and open it in ksnip to annotate.
+- **Shift + Print**: current monitor screenshot; **Alt + Print**: active window.
+- Area captures are saved in `~/Pictures/Screenshots`; **Escape** cancels selection.
 
 Clipboard history persists locally. Clear it with `cliphist wipe`; disable the
 `wl-paste` lines in your override if you do not want clipboard history.

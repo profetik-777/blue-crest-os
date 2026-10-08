@@ -4,7 +4,7 @@ set -euo pipefail
 test -f /usr/share/wayland-sessions/sway.desktop
 test -f /usr/libexec/sway/layered-include
 grep -q layered-include /etc/sway/config
-for cmd in sway waybar rofi nwg-displays nwg-look cliphist grimshot; do
+for cmd in sway waybar rofi nwg-displays nwg-look cliphist grimshot grim slurp flatpak xdg-user-dir; do
     command -v "$cmd"
 done
 chmod 0755 /usr/bin/bluecrest-* /usr/bin/wallpaper-picker
@@ -14,3 +14,5 @@ foot --check-config --config /etc/xdg/foot/foot.ini
 systemctl set-default graphical.target
 
 bash -n /etc/profile.d/90-bluecrest-yazi.sh
+
+bash -n /usr/bin/bluecrest-screenshot

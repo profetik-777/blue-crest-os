@@ -116,6 +116,7 @@ modules:
     scope: system
     install:
     - org.mozilla.firefox
+    - org.ksnip.ksnip
     - io.github.kolunmi.Bazaar
     - com.ranfdev.DistroShelf
     - com.github.tchx84.Flatseal

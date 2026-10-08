@@ -16,8 +16,9 @@ Super + F1              This shortcut guide
 Super + Shift + V       Clipboard history
 Super + Shift + X       Lock
 Super + Shift + Enter   File manager
-Print                   Screenshot of output
-Ctrl + Print            Screenshot of selected area
+Print                   Select area and edit in ksnip
+Ctrl + Print            Select area and edit in ksnip
+Shift + Print           Screenshot of output
 Alt + Print             Screenshot of active window
 Super + Shift + C       Reload configuration
 Super + Shift + E       Log out prompt
