@@ -41,7 +41,7 @@ an old session. Existing user files are not overwritten.
 - **Super + Q**: close the focused window.
 - **Four-finger swipe left/right**: previous/next workspace on the current monitor.
 - Workspaces **1, 2, 3** stay visible in the bar; Foot defaults to **12-point** text.
-- The bar clock uses **12-hour time with AM/PM**.
+- The bar centers the date and **12-hour time with AM/PM**. Distinct pastel colors\n  highlight text readouts for CPU, RAM, storage, volume, Wi-Fi and battery.
 - **Super + Shift + V**: clipboard history (text and images).
 - **Super + Shift + X**: lock. Idle lock occurs after five minutes by default.
 - **Print** or **Ctrl + Print**: select an area and open it in ksnip to annotate.
@@ -70,7 +70,7 @@ Fedora's layered-include mechanism lets you override a file by creating one with
 the same name under `~/.config/sway/config.d/`.
 The bar override is `90-bar.conf`. Supply `~/.config/waybar/config` or
 `config.jsonc` to use your own bar; otherwise the image uses the small Blue Crest
-bar in `/usr/share/bluecrest/`.
+bar in `/usr/share/bluecrest/`. The default uses a midnight background with rounded,\ncolor-coded status modules. CPU and RAM show percent used; storage shows percent\nused on `/var/home`, with used/total space in its tooltip.
 
 A pre-existing `~/.config/sway/config` takes precedence over Fedora's main config.
 It must use Fedora's layered-include mechanism to pick up these snippets.
@@ -136,7 +136,7 @@ folder. **Ctrl+T** creates a new Yazi tab, replacing the default `t t` sequence.
 Setup copies the keymap only if `~/.config/yazi/keymap.toml` does not exist.
 Existing keymaps and Bash functions are preserved. To adopt the keys manually,
 merge the entries from `/usr/share/bluecrest/yazi/keymap.toml` into your keymap.
-The Bash wrapper is supplied by `/etc/profile.d/90-bluecrest-yazi.sh`.
+The Bash wrapper is supplied by `/etc/profile.d/90-bluecrest-yazi.sh`.\nLaunch with `y`, rather than `yazi`, so the wrapper can change the parent shell's\ndirectory on exit. The `t` customization exits Yazi; it does not open another\nterminal window. Syncing `~/.config/yazi` transfers the keymap, but the receiving\nmachine also needs this shell wrapper for the same behavior.
 
 Check or retry setup:
 ```sh

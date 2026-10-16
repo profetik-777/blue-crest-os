@@ -9,13 +9,15 @@
     "sway/mode"
   ],
   "modules-center": [
-    "sway/window"
+    "clock"
   ],
   "modules-right": [
+    "cpu",
+    "memory",
+    "disk",
     "pulseaudio",
     "network",
     "battery",
-    "clock",
     "tray"
   ],
   "custom/settings": {
@@ -32,9 +34,6 @@
       "2": [],
       "3": []
     }
-  },
-  "sway/window": {
-    "max-length": 28
   },
   "pulseaudio": {
     "format": "Vol {volume}%",
@@ -60,10 +59,39 @@
     "interval": 30
   },
   "clock": {
-    "format": "{:%a %I:%M %p}",
-    "tooltip-format": "{:%Y-%m-%d}"
+    "format": "{:%a %b %d  %I:%M %p}",
+    "tooltip-format": "{:%A, %B %d, %Y}"
   },
   "tray": {
     "spacing": 8
+  },
+  "fixed-center": true,
+  "memory": {
+    "interval": 5,
+    "format": "RAM {percentage}%",
+    "tooltip-format": "{used:.1f} / {total:.1f} GiB used",
+    "states": {
+      "warning": 75,
+      "critical": 90
+    }
+  },
+  "disk": {
+    "interval": 30,
+    "path": "/var/home",
+    "format": "Storage {percentage_used}%",
+    "tooltip-format": "{used} / {total} used on {path} ({free} free)",
+    "states": {
+      "warning": 80,
+      "critical": 95
+    }
+  },
+  "cpu": {
+    "interval": 3,
+    "format": "CPU {usage}%",
+    "tooltip-format": "CPU usage: {usage}%",
+    "states": {
+      "warning": 75,
+      "critical": 90
+    }
   }
 }
