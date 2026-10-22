@@ -59,6 +59,7 @@ modules:
     - geany-themes
     - geany-plugins-addons
     - gnome-boxes
+    - gnome-disk-utility
     - virt-manager
     - filezilla
     - tmux
