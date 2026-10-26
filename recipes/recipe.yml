@@ -55,6 +55,9 @@ modules:
     - upower
     - podman
     - distrobox
+    - firefox
+    - firefox-langpacks
+    - mozilla-ublock-origin
     - geany
     - geany-themes
     - geany-plugins-addons
@@ -116,7 +119,6 @@ modules:
   - notify: true
     scope: system
     install:
-    - org.mozilla.firefox
     - org.ksnip.ksnip
     - io.github.kolunmi.Bazaar
     - com.ranfdev.DistroShelf
