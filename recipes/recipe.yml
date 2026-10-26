@@ -55,9 +55,6 @@ modules:
     - upower
     - podman
     - distrobox
-    - firefox
-    - firefox-langpacks
-    - mozilla-ublock-origin
     - geany
     - geany-themes
     - geany-plugins-addons
@@ -79,6 +76,8 @@ modules:
     - breeze-cursor-theme
   remove:
     packages:
+    - firefox
+    - firefox-langpacks
     - gnome-connections
     - gnome-calendar
     - simple-scan
@@ -119,6 +118,7 @@ modules:
   - notify: true
     scope: system
     install:
+    - org.mozilla.firefox
     - org.ksnip.ksnip
     - io.github.kolunmi.Bazaar
     - com.ranfdev.DistroShelf
