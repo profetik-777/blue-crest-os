@@ -101,6 +101,100 @@ modules:
       packages:
       - nwg-displays
       - nwg-look
+# Common Bluefin DX developer tools; keep the existing Sway base.
+# Reference: ublue-os/bluefin build_files/dx/00-dx.sh
+- type: dnf
+  install:
+    packages:
+    - android-tools
+    - bcc
+    - bpftop
+    - bpftrace
+    - cascadia-code-fonts
+    - cockpit-bridge
+    - cockpit-machines
+    - cockpit-networkmanager
+    - cockpit-ostree
+    - cockpit-podman
+    - cockpit-selinux
+    - cockpit-storaged
+    - cockpit-system
+    - dbus-x11
+    - edk2-ovmf
+    - flatpak-builder
+    - genisoimage
+    - git-subtree
+    - git-svn
+    - iotop
+    - libvirt
+    - libvirt-nss
+    - nicstat
+    - numactl
+    - osbuild-selinux
+    - p7zip
+    - p7zip-plugins
+    - podman-compose
+    - podman-machine
+    - podman-tui
+    - qemu
+    - qemu-char-spice
+    - qemu-device-display-virtio-gpu
+    - qemu-device-display-virtio-vga
+    - qemu-device-usb-redirect
+    - qemu-img
+    - qemu-system-x86-core
+    - qemu-user-binfmt
+    - qemu-user-static
+    - sysprof
+    - incus
+    - incus-agent
+    - lxc
+    - tiptop
+    - trace-cmd
+    - udica
+    - util-linux-script
+    - virt-v2v
+    - virt-viewer
+    - wtype
+    - ydotool
+# Docker's official Fedora repository supplies Engine, Buildx and Compose v2.
+- type: dnf
+  repos:
+    files:
+    - https://download.docker.com/linux/fedora/docker-ce.repo
+    cleanup: true
+  install:
+    packages:
+    - repo: docker-ce-stable
+      packages:
+      - containerd.io
+      - docker-ce
+      - docker-ce-cli
+      - docker-buildx-plugin
+      - docker-compose-plugin
+# Use Microsoft's signed RPM repository, as in Bluefin DX.
+- type: script
+  snippets:
+  - |
+    set -eu
+    cat > /etc/yum.repos.d/bluecrest-vscode.repo <<'EOF'
+    [bluecrest-code]
+    name=Visual Studio Code
+    baseurl=https://packages.microsoft.com/yumrepos/vscode
+    enabled=0
+    gpgcheck=1
+    gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+    EOF
+    dnf5 -y --enable-repo=bluecrest-code install code
+    rm /etc/yum.repos.d/bluecrest-vscode.repo
+  - |
+    set -eu
+    for tool in podman podman-compose docker code virsh incus; do
+      command -v "$tool"
+    done
+    docker compose version
+    docker buildx version
+    podman-compose --version
 - type: files
   files:
   - source: system
@@ -113,6 +207,8 @@ modules:
     enabled:
     - sddm.service
     - tailscaled.service
+    - docker.socket
+    - podman.socket
 - type: default-flatpaks
   configurations:
   - notify: true
@@ -126,6 +222,7 @@ modules:
     - io.gitlab.adhami3310.Impression
     - org.remmina.Remmina
     - com.google.AndroidStudio
+    - io.podman_desktop.PodmanDesktop
   - scope: user
 - type: brew
   nofile-limits: true
