@@ -126,6 +126,7 @@ modules:
     - git-subtree
     - git-svn
     - iotop
+    - libcgroup
     - libvirt
     - libvirt-nss
     - nicstat
