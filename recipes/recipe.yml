@@ -25,12 +25,16 @@ modules:
     - swaylock
     - mako
     - lxqt-policykit
+    # Screen mirroring / Immersed prerequisites for Sway.
+    - xdg-desktop-portal
     - xdg-desktop-portal-wlr
     - xdg-desktop-portal-gtk
     - gnome-keyring
     - pipewire
     - pipewire-pulseaudio
     - wireplumber
+    - libva
+    - libva-utils
     - pavucontrol
     - brightnessctl
     - playerctl
