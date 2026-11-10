@@ -63,6 +63,41 @@ or sleep/graphics workarounds are shipped.
 The theme editor changes GTK settings; retained Qt applications may require
 separate Qt/Kvantum settings.
 
+## Ksnip text annotation crash workaround
+
+If the ksnip Flatpak crashes when typing a text annotation under Wayland, run
+its editor through XWayland. This workaround was recorded on October 8, 2026,
+and reapplied on November 10, 2026 after the per-user override was found missing.
+The earlier investigation associated the crashes with
+[ksnip issue #1118](https://github.com/ksnip/ksnip/issues/1118).
+
+Apply this persistent override as your normal desktop user:
+
+```sh
+flatpak override --user \
+  --socket=x11 \
+  --nosocket=wayland \
+  --env=QT_QPA_PLATFORM=xcb \
+  org.ksnip.ksnip
+```
+
+Save any open edits, fully close all ksnip windows, then reopen ksnip and test a
+text annotation. Already-running instances do not pick up the new environment.
+This setting applies only to this user's ksnip Flatpak, so repeat it for another
+user or machine when needed. XWayland must be available in the desktop session.
+
+Verify the saved override:
+
+```sh
+flatpak override --user --show org.ksnip.ksnip
+```
+
+The output should include `sockets=!wayland;x11;` (order may vary) and
+`QT_QPA_PLATFORM=xcb`. Grim and slurp continue capturing the selected area
+natively under Sway; the workaround changes the editor's display backend.
+The November 10 check verified the override was saved; interactive typing still
+needs to be checked after restarting ksnip.
+
 ## Configuration
 
 System conveniences live in `/etc/sway/config.d/99-bluecrest.conf`.
